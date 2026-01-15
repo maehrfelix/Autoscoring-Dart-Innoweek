@@ -160,7 +160,7 @@ def findEllipse(thresh2, image_proc_img):
                             cv.CV_RGB(255, 0, 0))
         # corrupted file
         except:
-            print "error"
+            print("error")
             return Ellipse, image_proc_img
 
     Ellipse.a = a
@@ -375,7 +375,7 @@ def calibrate(cam_R, cam_L):
         _, imCalRGB_L = cam_L.read()
 
     except:
-        print "Could not init cams"
+        print("Could not init cams")
         return
 
     imCal_R = imCalRGB_R.copy()
@@ -436,7 +436,7 @@ def calibrate(cam_R, cam_L):
 
             #corrupted file
             except EOFError as err:
-                print err
+                print(err)
 
         # start calibration if no calibration data exists
         else:
@@ -462,8 +462,8 @@ def calibrate(cam_R, cam_L):
 
             cv2.destroyAllWindows()
 
-            print "The dartboard image has now been normalized."
-            print ""
+            print("The dartboard image has now been normalized.")
+            print("")
 
             cv2.imshow(winName4, imCal_R)
             test = cv2.waitKey(0)
@@ -489,7 +489,7 @@ def calibrate(cam_R, cam_L):
 
 
 if __name__ == '__main__':
-    print "Welcome to darts!"
+    print("Welcome to darts!")
 
     cam_R = VideoStream(src=2).start()
     cam_L = VideoStream(src=3).start()
