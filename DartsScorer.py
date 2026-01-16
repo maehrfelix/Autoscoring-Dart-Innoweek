@@ -63,7 +63,7 @@ def GameOn():
 
 def printin(event):
     test = str(eval(GUI.e1.get()))
-    print test
+    print( test)
 
 
 def calibrateGUI():

@@ -135,12 +135,12 @@ def DartLocation(x_coord,y_coord):
 
     #system not calibrated
     except AttributeError as err1:
-        print err1
+        print(err1)
         return (-1, -1)
 
     except NameError as err2:
         #not calibrated error
-        print err2
+        print(err2) 
         return (-2, -2)
 
 
@@ -169,7 +169,7 @@ def DartRegion(dart_loc):
 
             angleDiffMul = int((dart_angle) / 18.0)
 
-            print vx, vy, dart_angle
+            print(vx, vy, dart_angle)
 
             #starting from the 20 points
             if angleDiffMul == 19:
@@ -249,13 +249,13 @@ def DartRegion(dart_loc):
 
     #system not calibrated
     except AttributeError as err1:
-        print err1
+        print(err1)
         dartInfo = dartThrow()
         return dartInfo
 
     except NameError as err2:
         #not calibrated error
-        print err2
+        print(err2) 
         dartInfo = dartThrow()
         return dartInfo
 
@@ -396,7 +396,7 @@ def getDart():
                     corners_temp = cornerdata
                     maxloc = np.argmax(corners_temp, axis=0)
                     locationofdart = corners_temp[maxloc]
-                    print "### used different location due to noise!"
+                    print("### used different location due to noise!")
 
                 cv2.circle(t_plus_copy, (locationofdart.item(0),locationofdart.item(1)), 10,(0, 0, 0),2, 8)
                 cv2.circle(t_plus_copy, (locationofdart.item(0), locationofdart.item(1)), 2, (0, 0, 0), 2, 8)
@@ -407,12 +407,12 @@ def getDart():
                 dartInfo = DartRegion(dartloc) #cal_image
 
             except:
-                print "Something went wrong in finding the darts location!"
+                print("Something went wrong in finding the darts location!") 
                 continue
 
             # check for the location of the dart with the calibration
 
-            print dartInfo.base, dartInfo.multiplier
+            print(dartInfo.base, dartInfo.multiplier) 
 
             if breaker == 1:
                 cv2.imwrite("frame2.jpg", testimg)  # save dart1 frame
@@ -467,6 +467,6 @@ dartInfo = dartThrow()
 
 
 if __name__ == '__main__':
-    print "Welcome to darts!"
+    print("Welcome to darts!") 
     getDart()
     #getTransformation()

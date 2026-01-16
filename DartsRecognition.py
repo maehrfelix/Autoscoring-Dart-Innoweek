@@ -118,7 +118,7 @@ def getRealLocation(corners_final, mount):
         corners_temp = cornerdata
         maxloc = np.argmax(corners_temp, axis=0)
         locationofdart = corners_temp[maxloc]
-        print "### used different location due to noise!"
+        print("### used different location due to noise!")
 
     return locationofdart
 
@@ -150,7 +150,7 @@ def getDarts(cam_R, cam_L, calData_R, calData_L, playerObj, GUI):
         thresh_R = getThreshold(cam_R, t_R)
         thresh_L = getThreshold(cam_L, t_L)
 
-        print cv2.countNonZero(thresh_R)
+        print(cv2.countNonZero(thresh_R)) 
         ## threshold important
         if (cv2.countNonZero(thresh_R) > minThres and cv2.countNonZero(thresh_R) < maxThres) \
             or (cv2.countNonZero(thresh_L) > minThres and cv2.countNonZero(thresh_L) < maxThres):
@@ -167,7 +167,7 @@ def getDarts(cam_R, cam_L, calData_R, calData_L, playerObj, GUI):
 
             # dart outside?
             if corners_R.size < 40 and corners_L.size < 40:
-                print "### dart not detected"
+                print("### dart not detected")
                 continue
 
             # filter corners
@@ -176,7 +176,7 @@ def getDarts(cam_R, cam_L, calData_R, calData_L, playerObj, GUI):
 
             # dart outside?
             if corners_f_R.size < 30 and corners_f_L.size < 30:
-                print "### dart not detected"
+                print("### dart not detected") 
                 continue
 
             # find left and rightmost corners#
@@ -188,11 +188,11 @@ def getDarts(cam_R, cam_L, calData_R, calData_L, playerObj, GUI):
             _, thresh_L = cv2.threshold(blur_L, 60, 255, 0)
 
             # check if it was really a dart
-            print cv2.countNonZero(thresh_R)
+            print(cv2.countNonZero(thresh_R)) 
             if cv2.countNonZero(thresh_R) > maxThres*2 or cv2.countNonZero(thresh_L) > maxThres*2:
                 continue
 
-            print "Dart detected"
+            print("Dart detected")
             # dart was found -> increase counter
             breaker += 1
 
@@ -219,7 +219,7 @@ def getDarts(cam_R, cam_L, calData_R, calData_L, playerObj, GUI):
                 cv2.circle(testimg, (locationofdart_R.item(0), locationofdart_R.item(1)), 10, (255, 255, 255), 2, 8)
                 cv2.circle(testimg, (locationofdart_R.item(0), locationofdart_R.item(1)), 2, (0, 255, 0), 2, 8)
             except:
-                print "Something went wrong in finding the darts location!"
+                print("Something went wrong in finding the darts location!") 
                 breaker -= 1
                 continue
 
@@ -233,7 +233,7 @@ def getDarts(cam_R, cam_L, calData_R, calData_L, playerObj, GUI):
                 else:
                     dartInfo = dartInfo_L
 
-            print dartInfo.base, dartInfo.multiplier
+            print(dartInfo.base, dartInfo.multiplier) 
 
             if breaker == 1:
                 GUI.dart1entry.insert(10,str(dartInfo.base * dartInfo.multiplier))
@@ -293,11 +293,11 @@ def getDarts(cam_R, cam_L, calData_R, calData_L, playerObj, GUI):
     GUI.finalentry.delete(0, 'end')
     GUI.finalentry.insert(10,finalScore)
 
-    print finalScore
+    print(finalScore) 
 
 
 if __name__ == '__main__':
-    print "Welcome to darts!"
+    print("Welcome to darts!")
     img = cv2.imread("D:\Projekte\PycharmProjects\DartsScorer\Darts\Dartboard_2.png")
     img2 = cv2.imread("D:\Projekte\PycharmProjects\DartsScorer\Darts\Dartboard_3.png")
 
