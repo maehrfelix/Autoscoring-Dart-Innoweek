@@ -2,7 +2,7 @@
 import numpy as np
 import cv2
 import time
-import cv2.cv as cv
+#import cv2.cv as cv
 import math
 import pickle
 
@@ -345,7 +345,7 @@ def getDart():
 
             # find left and rightmost corners
             rows,cols = dimg.shape[:2]
-            [vx,vy,x,y] = cv2.fitLine(corners_new,cv.CV_DIST_HUBER, 0,0.1,0.1)
+            [vx,vy,x,y] = cv2.fitLine(corners_new,cv2.DIST_HUBER, 0,0.1,0.1)
             lefty = int((-x*vy/vx) + y)
             righty = int(((cols-x)*vy/vx)+y)
 
