@@ -1,8 +1,8 @@
 
-from Tkinter import *
-from Calibration_1 import *
+from tkinter import *
+from Calibration import *
 from DartsRecognition import *
-from thread import *
+from threading import *
 from Classes import *
 
 import cv2
