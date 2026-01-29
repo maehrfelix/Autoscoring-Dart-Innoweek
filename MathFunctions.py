@@ -38,7 +38,7 @@ def dist(x1,y1, x2,y2, x3,y3): # x3,y3 is the point
     return dist
 
 
-def intersectLineCircle(center, radius, p1, p2):
+def intersectLineCircle(center, radius, p1, p2):    #p3 muss noch dazuprogrammiert werden
     baX = p2[0] - p1[0]
     baY = p2[1] - p1[1]
     caX = center[0] - p1[0]
@@ -68,7 +68,7 @@ def intersectLineCircle(center, radius, p1, p2):
 
 
 # line intersection
-def intersectLines(pt1, pt2, ptA, ptB):
+def intersectLines(pt1, pt2, ptA, ptB):     
     """ this returns the intersection of Line(pt1,pt2) and Line(ptA,ptB)
 
         returns a tuple: (xi, yi, valid, r, s), where

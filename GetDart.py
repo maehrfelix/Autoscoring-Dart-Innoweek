@@ -49,7 +49,7 @@ class CalibrationData:
 ## improve and make circle radius accessible
 def drawBoard():
     raw_loc_mat = np.zeros((800, 800, 3))
-
+    #anstatt 800 Bildgröße angeben
     # draw board
     cv2.circle(raw_loc_mat, (400, 400), 170 * 2, (255, 255, 255), 1)  # outside double
     cv2.circle(raw_loc_mat, (400, 400), 160 * 2, (255, 255, 255), 1)  # inside double
@@ -57,7 +57,7 @@ def drawBoard():
     cv2.circle(raw_loc_mat, (400, 400), 97 * 2, (255, 255, 255), 1)  # inside treble
     cv2.circle(raw_loc_mat, (400, 400), 16 * 2, (255, 255, 255), 1)  # 25
     cv2.circle(raw_loc_mat, (400, 400), 7 * 2, (255, 255, 255), 1)  # Bulls eye
-
+    #anstatt 400 eigene Mittelpunktkoordinaten einsetzen
     # 20 sectors...
     sectorangle = 2 * math.pi / 20
     i = 0
@@ -70,7 +70,7 @@ def drawBoard():
     return raw_loc_mat
 
 def dist(x1,y1, x2,y2, x3,y3): # x3,y3 is the point
-    px = x2-x1
+    px = x2-x1                  #point 3 dazuprogrammieren?
     py = y2-y1
 
     something = px*px + py*py
@@ -147,7 +147,7 @@ def DartLocation(x_coord,y_coord):
 #Returns dartThrow (score, multiplier, angle, magnitude) based on x,y location
 def DartRegion(dart_loc):
     try:
-            height = 800
+            height = 800    #eigene Bildhöhe/breite einfügen
             width = 800
 
             global dartInfo

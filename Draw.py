@@ -15,19 +15,20 @@ class Draw:
     def drawBoard(self, img, calData):
 
         # draw board
-        cv2.circle(img, (400, 400), calData.ring_radius[0], (255, 255, 255), 1)  # outside double
+        cv2.circle(img, (400, 400), calData.ring_radius[0], (255, 255, 255), 1)  # outside double   
         cv2.circle(img, (400, 400), calData.ring_radius[1], (255, 255, 255), 1)  # inside double
         cv2.circle(img, (400, 400), calData.ring_radius[2], (255, 255, 255), 1)  # outside treble
         cv2.circle(img, (400, 400), calData.ring_radius[3], (255, 255, 255), 1)  # inside treble
         cv2.circle(img, (400, 400), calData.ring_radius[4], (255, 255, 255), 1)  # 25
         cv2.circle(img, (400, 400), calData.ring_radius[5], (255, 255, 255), 1)  # Bulls eye
 
-
+        #(400,400)muss noch richtig eingestellt werden --> an dieser Stelle Koordinaten von Mittelpunkt einsetzen
+        #calDato.ring_radius muss noch programmiert werden
         i = 0
         while (i < 20):
             cv2.line(img, (400, 400), (
                 int(400 + calData.ring_radius[5] * math.cos((0.5 + i) * self.sectorangle)),
                 int(400 + calData.ring_radius[5] * math.sin((0.5 + i) * self.sectorangle))), (255, 255, 255), 1)
             i = i + 1
-
+            #Anstatt 400 --> Koordinaten von Mittelpunkt
         return img
