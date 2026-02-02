@@ -29,7 +29,7 @@ def nothing(x):
     pass
 
 
-def destinationPoint(i, calData):
+def destinationPoint(i, calData): #i... Sektorindex --> 0... ...19
     dstpoint = [(calData.center_dartboard[0] + calData.ring_radius[5] * math.cos((0.5 + i) * calData.sectorangle)),
                 (calData.center_dartboard[1] + calData.ring_radius[5] * math.sin((0.5 + i) * calData.sectorangle))]
 
