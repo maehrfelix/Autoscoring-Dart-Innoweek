@@ -6,10 +6,13 @@ import time
 import math
 import pickle
 
-img = cv2.imread("D:\Projekte\PycharmProjects\DartsScorer\Darts\Dartboard_2.png")
+img = cv2.imread("D:\Projekte\PycharmProjects\DartsScorer\Darts\Dartboard_2.png") 
 img2 = cv2.imread("D:\Projekte\PycharmProjects\DartsScorer\Darts\Dartboard_3.png")
+#Pfad von Dartbildern eingeben
 
 vidcap = cv2.VideoCapture("C:\Users\hanne\OneDrive\Projekte\GitHub\darts\Darts\Darts_Testvideo_9_1.mp4")
+#Pfad der Videos der Kameras eingeben
+
 from_video = True
 
 DEBUG = True
@@ -49,15 +52,16 @@ class CalibrationData:
 ## improve and make circle radius accessible
 def drawBoard():
     raw_loc_mat = np.zeros((800, 800, 3))
-
+    #anstatt 800 Bildgröße angeben
     # draw board
+    # erzeugt Dartradien und Linien der Segmente, raw_loc_mat enthält am Ende ein schwarzes Bild mit den weißen Ringen der Dartscheibe und den weißen Segmentbegrenzungen
     cv2.circle(raw_loc_mat, (400, 400), 170 * 2, (255, 255, 255), 1)  # outside double
     cv2.circle(raw_loc_mat, (400, 400), 160 * 2, (255, 255, 255), 1)  # inside double
     cv2.circle(raw_loc_mat, (400, 400), 107 * 2, (255, 255, 255), 1)  # outside treble
     cv2.circle(raw_loc_mat, (400, 400), 97 * 2, (255, 255, 255), 1)  # inside treble
     cv2.circle(raw_loc_mat, (400, 400), 16 * 2, (255, 255, 255), 1)  # 25
     cv2.circle(raw_loc_mat, (400, 400), 7 * 2, (255, 255, 255), 1)  # Bulls eye
-
+    #anstatt 400 eigene Mittelpunktkoordinaten einsetzen
     # 20 sectors...
     sectorangle = 2 * math.pi / 20
     i = 0
@@ -70,9 +74,9 @@ def drawBoard():
     return raw_loc_mat
 
 def dist(x1,y1, x2,y2, x3,y3): # x3,y3 is the point
-    px = x2-x1
-    py = y2-y1
-
+    px = x2-x1                  #x1,y2--> Punkt1; x2, y2--> Punkt2; x3, y3 --> Punkt
+    py = y2-y1                  #von Punkt1 und Punkt2 wird eine Gerade gebildet und dann die Distanz zum Punkt berechnet
+                                #standardweise ist die Gerade eine Segmentbegrenzungsline und der Punkt ???????????????
     something = px*px + py*py
 
     u =  ((x3 - x1) * px + (y3 - y1) * py) / float(something)
@@ -98,7 +102,7 @@ def dist(x1,y1, x2,y2, x3,y3): # x3,y3 is the point
 
     return dist
 
-def DartLocation(x_coord,y_coord):
+def DartLocation(x_coord,y_coord):          #Kamerakoordinaten des Punktes werden in Dartscheibenkoordinaten umgewandelt
     try:
 
             #start a fresh set of points
@@ -111,7 +115,7 @@ def DartLocation(x_coord,y_coord):
             global transformation_matrix
             transformation_matrix = calData.transformationMatrix
             global ring_radius
-            ring_radius.append(calData.ring_radius[0])
+            ring_radius.append(calData.ring_radius[0])  #sollten nur einmal hinzugefügt werden
             ring_radius.append(calData.ring_radius[1])
             ring_radius.append(calData.ring_radius[2])
             ring_radius.append(calData.ring_radius[3])
@@ -128,8 +132,8 @@ def DartLocation(x_coord,y_coord):
             # transform only the hit point with the saved transformation matrix
             dart_loc_temp = np.array([[x_coord, y_coord]], dtype="float32")
             dart_loc_temp = np.array([dart_loc_temp])
-            dart_loc = cv2.perspectiveTransform(dart_loc_temp, transformation_matrix)
-            new_dart_loc = tuple(dart_loc.reshape(1, -1)[0])
+            dart_loc = cv2.perspectiveTransform(dart_loc_temp, transformation_matrix) #Transformationsmatrix der Kamera
+            new_dart_loc = tuple(dart_loc.reshape(1, -1)[0])    #gibt die Position des Darts zurück
 
             return new_dart_loc
 
@@ -145,9 +149,11 @@ def DartLocation(x_coord,y_coord):
 
 
 #Returns dartThrow (score, multiplier, angle, magnitude) based on x,y location
-def DartRegion(dart_loc):
+def DartRegion(dart_loc):   
+    # gibt die erzielten Punkte, den Multiplikator, den Winkel zum Mittelpunkt der Dartscheibe, den Abstand zur Mittelpunkt der Scheibe zurück
+    # Letzte Funktion, bevor Spielmodus abgerufen wird
     try:
-            height = 800
+            height = 800    #eigene Bildhöhe/breite einfügen
             width = 800
 
             global dartInfo
@@ -159,15 +165,15 @@ def DartRegion(dart_loc):
             vy = (center_dartboard[1] - dart_loc[1])
 
             # reference angle for atan2 conversion
-            ref_angle = 81
+            ref_angle = 81 #für ref_angle den Winkel der jeweiligen Kamera zur senkrechten Gerade einsetzen
 
-            dart_magnitude = math.sqrt(math.pow(vx, 2) + math.pow(vy, 2))
-            dart_angle = math.fmod(((math.atan2(vy,vx) * 180/math.pi) + 360 - ref_angle), 360)
+            dart_magnitude = math.sqrt(math.pow(vx, 2) + math.pow(vy, 2)) # gibt den Abstand zum Mittelpunkt der Dartscheibe zurück
+            dart_angle = math.fmod(((math.atan2(vy,vx) * 180/math.pi) + 360 - ref_angle), 360) #gibt den Winkel des Darts zurück
 
             dartInfo.magnitude = dart_magnitude
             dartInfo.angle = dart_angle
 
-            angleDiffMul = int((dart_angle) / 18.0)
+            angleDiffMul = int((dart_angle) / 18.0) #gibt den jeweiligen Sektor zurück, in dem der Dart liegt (es gibt 20 Sektoren)
 
             print(vx, vy, dart_angle)
 
@@ -214,12 +220,12 @@ def DartRegion(dart_loc):
                 dartInfo.base = 1
             else:
                 #something went wrong
-                dartInfo.base = -300
+                dartInfo.base = -300       #Sollte verbessert werden, zum Beispiel dartInfo.base=0
 
             #Calculating multiplier (and special cases for Bull's Eye):
             for i in range(0, len(ring_radius)):
                 #Find the ring that encloses the dart
-                if dartInfo.magnitude <= ring_radius[i]:
+                if dartInfo.magnitude <= ring_radius[i]:       #es gibt 6 Ringradius; hier wird überprüft, in welchen der Dart liegt
                     #Bull's eye, adjust base score
                     if i == 0:
                         dartInfo.base = 25
@@ -263,17 +269,18 @@ def DartRegion(dart_loc):
         #    break
 
 def getDart():
+    #erkennt Dartwurf, lokalisiert Dartspitze, Visualisiert Treffer
     global finalScore
     global transformation_matrix
 
-    debug_img = drawBoard()
+    debug_img = drawBoard()         #debug_img=Bild einer weißen Dartscheibe auf schwarzem Hintergrund
 
     finalScore = 0
     count = 0
     breaker = 0
     success = 1
     ## threshold important -> make accessible
-    x = 3000
+    x = 3000                        #minimale Anzahl der zu verändernden Pixel
     # Read first image twice (issue somewhere) to start loop:
     t = cv2.cvtColor(vidcap.read()[1], cv2.COLOR_RGB2GRAY)
     # wait for camera

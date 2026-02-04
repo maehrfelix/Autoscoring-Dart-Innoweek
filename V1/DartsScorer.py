@@ -5,6 +5,9 @@ from DartsRecognition import *
 from threading import *
 from Classes import *
 
+#cam_L und cam_R müssen umprogrammiert werden
+#Spielmodi, Spielerwechsel, momentan für 2 Spieler und nur von 501 herunterspielen, erzeugt auch Grafikanzeige
+
 import cv2
 import time
 
@@ -36,7 +39,7 @@ def GameOn():
     global cal_image
     success,cal_image = cam_R.read()
     cv2.imwrite("frame1.jpg", cal_image)     # save calibration frame
-    scoreplayer1 = 501
+    scoreplayer1 = 501                      #Dartmodi müssen hier richtig programmiert werden
     scoreplayer2 = 501
     global curr_player
     curr_player = 1
@@ -47,7 +50,7 @@ def GameOn():
     finalScore = 0
     GUI.e1.delete(0,'end')
     GUI.e2.delete(0,'end')
-    GUI.e1.insert(10,scoreplayer1)
+    GUI.e1.insert(10,scoreplayer1)          #hier richtig in der Class GuiDef in Classes einstellen
     GUI.e2.insert(10,scoreplayer2)
     GUI.finalentry.delete(0, 'end')
     GUI.dart1entry.delete(0, 'end')
@@ -147,7 +150,7 @@ player = Player()
 back_gnd = Canvas(root)
 back_gnd.pack(expand=True, fill='both')
 
-back_gnd_image = PhotoImage(file="C:\Users\hanne\OneDrive\Projekte\GitHub\darts\Dartboard.gif")
+back_gnd_image = PhotoImage(file="C:\Users\hanne\OneDrive\Projekte\GitHub\darts\Dartboard.gif") #anderes Bild nehmen
 back_gnd.create_image(0, 0, anchor='nw', image=back_gnd_image)
 
 # Create Buttons

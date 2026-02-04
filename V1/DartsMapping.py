@@ -7,7 +7,7 @@ from Classes import *
 DEBUG = True
 
 
-def getTransformedLocation(x_coord,y_coord, calData):
+def getTransformedLocation(x_coord,y_coord, calData):   #Kamerakoordinaten des Punktes werden in Dartscheibenkoordinaten umgewandelt
     try:
             # transform only the hit point with the saved transformation matrix
             # ToDo: idea for second camera -> transform complete image and overlap both images to find dart location?
@@ -32,7 +32,7 @@ def getTransformedLocation(x_coord,y_coord, calData):
 #Returns dartThrow (score, multiplier, angle, magnitude) based on x,y location
 def getDartRegion(dart_loc, calData):
     try:
-            height = 800
+            height = 800       #eigenes Bildformat
             width = 800
 
             dartInfo = DartDef()

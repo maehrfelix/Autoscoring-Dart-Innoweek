@@ -9,7 +9,7 @@ import cv2
 
 
 class VideoStream:
-    def __init__(self, src=0):
+    def __init__(self, src=0):  #für scr 0,1,2 eingeben für jeweilige Kamera
         # initialize the video camera stream and read the first frame
         # from the stream
         self.stream = cv2.VideoCapture(src)

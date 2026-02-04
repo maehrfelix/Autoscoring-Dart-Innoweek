@@ -50,8 +50,8 @@ class CalibrationData:
         self.right = []
         self.points = []
         #radii of the rings, there are 6 in total
-        self.ring_radius = [14, 32, 194, 214, 320, 340]
-        self.center_dartboard = (400, 400)
+        self.ring_radius = [14, 32, 194, 214, 320, 340] #eigener Ringradius einfügen
+        self.center_dartboard = (400, 400)  #eigener Mittelpunkt einfügen
         self.sectorangle = 2 * math.pi / 20
         self.dstpoints = []
-        self.transformation_matrix = []
+        self.transformation_matrix = []     #jede Kamera benötigt eigene Transformationsmatrix

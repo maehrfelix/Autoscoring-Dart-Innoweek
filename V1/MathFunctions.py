@@ -9,6 +9,7 @@ DEBUG = True
 
 # distance point to line
 def dist(x1,y1, x2,y2, x3,y3): # x3,y3 is the point
+    #Gibt den Abstand von der Geraden (durch p1 und p2) zum punkt p3 zurück, Gerade--> Sektorbegrenzung, Punkt--> Koordinaten von Dart 
     px = x2-x1
     py = y2-y1
 
@@ -38,10 +39,10 @@ def dist(x1,y1, x2,y2, x3,y3): # x3,y3 is the point
     return dist
 
 
-def intersectLineCircle(center, radius, p1, p2):
-    baX = p2[0] - p1[0]
-    baY = p2[1] - p1[1]
-    caX = center[0] - p1[0]
+def intersectLineCircle(center, radius, p1, p2):    #p1 und p2 , Center--> Tuple --> (x,y)
+    baX = p2[0] - p1[0]                             #p1 Punkt 1 der Geraden, p2 Punkt 2 der Geraden
+    baY = p2[1] - p1[1]                             #diese Funktion gibt die Koordinaten zurück, bei denen die Gerade den Eingegebenen Radius schneidet
+    caX = center[0] - p1[0]                         # zur Bestimmung, in welchen Kreis der Dart liegt                     
     caY = center[1] - p1[1]
 
     a = baX * baX + baY * baY
@@ -68,7 +69,7 @@ def intersectLineCircle(center, radius, p1, p2):
 
 
 # line intersection
-def intersectLines(pt1, pt2, ptA, ptB):
+def intersectLines(pt1, pt2, ptA, ptB):         #berechnet Schnittpunkt zweier Geraden, in bezug auf Segmente
     """ this returns the intersection of Line(pt1,pt2) and Line(ptA,ptB)
 
         returns a tuple: (xi, yi, valid, r, s), where
@@ -113,7 +114,7 @@ def intersectLines(pt1, pt2, ptA, ptB):
     return x, y
 
 
-def rotate(origin, point, angle):
+def rotate(origin, point, angle):       #origin--> Koordinaten des Mittelpunktes, angle--> Radiant (Achtung! Winkel gegen Uhrzeigersinn muss angegeben werden)
     """
     Rotate a point counterclockwise by a given angle around a given origin.
 
@@ -128,6 +129,8 @@ def rotate(origin, point, angle):
 
 
 def segment_intersection(p1, p2, p3, p4):
+    #Gibt den Schnittpunkt der Geraden g1(p1,p2) und der Geraden g2(p3,p4) zurück
+    #Geraden --> Sektorbegrenzungslinien; zur Überprüfung, ob sie sich im Mittelpunkt der Dartscheibe treffen
     x1 = p1[0]
     y1 = p1[1]
     x2 = p2[0]
