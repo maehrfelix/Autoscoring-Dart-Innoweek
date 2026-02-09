@@ -1,6 +1,7 @@
 
 import tkinter as tk
-from tkinter import *
+from tkinter import ttk
+import customtkinter as ctk
 
             
 class Game:
@@ -34,6 +35,8 @@ class Game:
         self.save4=0
         self.s=""
         self.s1=""
+        self.end=False
+        self.p=False
         
 
     def GetScore(self):
@@ -41,9 +44,9 @@ class Game:
         if(self.Playerfinished>=self.Spieler or self.finish==True):
             self.throw.clear()
             self.Multiplier.clear()
-            self.finish=False
-            
-            label4.config(text="Game ended")
+            self.finish=True
+            self.end=True
+            label4.configure(text="Game ended")
             
             return
         
@@ -61,24 +64,44 @@ class Game:
         if((self.NextScore==True) and (self.save!=1)):
             self.save=1                         
             Score1=int(input("Geben Sie den Score an:")) #sollte gelöscht werden
-            Multiplier1=int(input("Geben Sie den Multiplier an: ")) #sollte gelöscht werden
-            self.PThrow=(Score1,Multiplier1)
-            if(self.Mode==1):
-                self.root.after(20,self.NormalSchleife)
+            if(self.finish==True):
+                self.throw.clear()
+                self.Multiplier.clear()
+                self.finish=True
+                self.end=True
+                label4.configure(text="Game ended")
+                
+                return
+            else:
+                
+                Multiplier1=int(input("Geben Sie den Multiplier an: ")) #sollte gelöscht werden
+                
+                self.PThrow=(Score1,Multiplier1)
+                if(self.Mode==1):
+                    self.root.after(20,self.NormalSchleife)
                 
             
-            elif(self.Mode==2):
-                self.root.after(20,self.DoubleSchleife)
+                elif(self.Mode==2):
+                    self.root.after(20,self.DoubleSchleife)
                 
-            elif(self.Mode==3):
-                self.root.after(20,self.SSchleife)
+                elif(self.Mode==3):
+                    self.root.after(20,self.SSchleife)
                 
-            else:
-                self.root.after(20,self.ASchleife)
+                else:
+                    self.root.after(20,self.ASchleife)
                 
         
         elif(self.save==1):
-            pass    
+            if(self.finish==True):
+                self.throw.clear()
+                self.Multiplier.clear()
+                self.finish=True
+                self.end=True
+                label4.configure(text="Game ended")
+                
+                return
+            else:
+                pass    
         else:
             if(self.Miss==True):
                 self.save=1
@@ -103,6 +126,7 @@ class Game:
 
     def GameEnd(self):
         self.finish=True
+        
     def GetLoserPlayer(self):               
         for u in range(self.Spieler):
             if(self.Score[u]==0):
@@ -126,11 +150,13 @@ class Game:
         self.save1=0
         self.save3=0
         
+        
         if(self.Playerfinished>=self.Spieler or self.finish==True):
             self.throw.clear()
             self.Multiplier.clear()
-            self.finish=False
-            label4.config(text="Game ended")
+            self.finish=True
+            label4.configure(text="Game ended")
+            self.end=True
             return
         
         elif((self.NextPlayer1==True)and(self.save!=1)):
@@ -141,9 +167,10 @@ class Game:
             else:
                 self.actualPlayer=0
             self.NextPlayer1=False
-            label4.config(text="")
+            label4.configure(text="")
             self.s=""
-            label3.config(text="Player {}".format((self.actualPlayer)+1))
+            label3.configure(text="Player {}".format((self.actualPlayer)+1))
+            
             self.s1="Score:\n"
             for b in range(self.Spieler):
                 if(((self.Score[b]==0)and(self.Mode==1 or self.Mode==2))or((self.Score[b]==26)and(self.Mode==3 or self.Mode==4))):
@@ -152,7 +179,7 @@ class Game:
                     self.s1=self.s1+"\nPlayer: {}  Score: {}".format((b+1),self.Score[b])
                 else:
                     self.s1=self.s1+"\nPlayer: {}  NextGoalScore: {}".format((b+1),self.Score[b])
-            label5.config(text=self.s1)
+            label5.configure(text=self.s1)
             
             if(self.Mode==1):
                 
@@ -185,9 +212,9 @@ class Game:
             else:
                 self.actualPlayer=0
             self.NextPlayer1=False
-            label4.config(text="")
+            label4.configure(text="")
             self.s=""
-            label3.config(text="Player {}".format((self.actualPlayer)+1))
+            label3.configure(text="Player {}".format((self.actualPlayer)+1))
             self.s1="Score:\n"
             for b in range(self.Spieler):
                 if(((self.Score[b]==0)and(self.Mode==1 or self.Mode==2))or((self.Score[b]==26)and(self.Mode==3 or self.Mode==4))):
@@ -196,7 +223,7 @@ class Game:
                     self.s1=self.s1+"\nPlayer: {}  Score: {}".format((b+1),self.Score[b])
                 else:
                     self.s1=self.s1+"\nPlayer: {}  NextGoalScore: {}".format((b+1),self.Score[b])
-            label5.config(text=self.s1)
+            label5.configure(text=self.s1)
             if(self.Mode==1):
                 self.root.after(20,self.HerunterspielenModeNormal)
             elif(self.Mode==2):
@@ -209,11 +236,15 @@ class Game:
             pass
         
     def Herunterspielen(self,Spieleranzahl,Punkte,DoubleOut):
+        self.Playerfinished=0
+        self.p=False
         self.s=""
-        label4.config(text="{}".format(self.s))
+        label4.configure(text="")
+        label3.configure(text="Player 1")
         self.save=0
         self.save1=0
         self.save2=0
+        self.end=False
         if(self.save4!=1):
             self.save4=1
             self.finish=False
@@ -241,7 +272,7 @@ class Game:
                     self.s1=self.s1+"\nPlayer: {}  You are finished".format((b+1))
                 else:
                     self.s1=self.s1+"\nPlayer: {}  Score: {}".format((b+1),self.Score[b])
-            label5.config(text=self.s1)
+            label5.configure(text=self.s1)
             
             if(DoubleOut==False):
                 self.Mode=1
@@ -255,6 +286,7 @@ class Game:
 
 
     def HerunterspielenModeNormal(self):
+        self.p=False
         self.save4=0
         self.save1=0
         self.save=0
@@ -263,7 +295,7 @@ class Game:
                 
                 self.throw.clear()
                 self.Multiplier.clear()
-                label4.config(text="Game ended")
+                label4.configure(text="Game ended")
                 return
             self.save2=1
             self.save1=0
@@ -271,13 +303,13 @@ class Game:
             if(self.finish==True):
                 self.throw.clear()
                 self.Multiplier.Clear()
-                label4.config(text="Game ended")
+                label4.configure(text="Game ended")
                 return
             self.throw.clear()
             self.Multiplier.clear()
             if(self.Score[self.actualPlayer]==0):
                 self.root.after(20,self.NextPlayer2)
-        
+                
             
             self.k=0
             self.root.after(20,self.ModeNormalSchleife)
@@ -287,6 +319,7 @@ class Game:
         
 
     def NormalSchleife(self):
+        
         self.save=0
         self.save1=0
         self.save3=0
@@ -299,23 +332,24 @@ class Game:
             if(Score==0):
                 self.throw.append(0)
                 self.s=self.s+(("\nPlayer: {}  Throw{}: Miss").format((self.actualPlayer+1),(self.k+1)))
-                label4.config(text="{}".format(self.s))
+                label4.configure(text="{}".format(self.s))
             elif(self.finish==True or self.Playerfinished>=self.Spieler):
                 self.throw.clear()
                 self.Multiplier.clear()
-                label4.config(text="Game ended")
+                label4.configure(text="Game ended")
                 return
             else:
                 self.throw.append((Score*Multiplier))
                 self.Multiplier.append(Multiplier)
                 self.s=self.s+(("\nPlayer: {}  Throw{}: {}  Multiplier: {}  Score: {}").format((self.actualPlayer+1),(self.k+1),Score,Multiplier,(Multiplier*Score)))
-                label4.config(text="{}".format(self.s))
+                label4.configure(text="{}".format(self.s))
                 
             if(self.k==0):
                 if(self.Score[self.actualPlayer]-(self.throw[0])<0):
                     self.Score[self.actualPlayer]=self.Score[self.actualPlayer]
                     self.s=self.s+("\n\nPlayer: Player{}    Your Score got resettet       Score: {}".format((self.actualPlayer+1),self.Score[self.actualPlayer]))
-                    label4.config(text="{}".format(self.s))
+                    self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                    label4.configure(text="{}".format(self.s))
                     self.throw.clear()
                     self.Multiplier.clear()
                     self.root.after(20,self.NextPlayer)
@@ -326,17 +360,18 @@ class Game:
                         self.throw.clear()
                         self.Multiplier.clear()
                         self.finish=True
-                        label4.config(text="Game ended")
+                        label4.configure(text="Game ended")
                         return
                     else:
                         self.s=self.s+("\n\nPlayer: Player{}  Score: You finished {}st/nd/rd/th".format((self.actualPlayer+1),self.Playerfinished))
-                        label4.config(text="{}".format(self.s))
+                        self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                        label4.configure(text="{}".format(self.s))
                         self.throw.clear()
                         self.Multiplier.clear()
                         if(self.Playerfinished>=(self.Spieler-1)):
                             self.throw.clear()
                             self.Multiplier.clear()
-                            label4.config(text="Game ended")
+                            label4.configure(text="Game ended")
                             self.finish=True
                             
                             
@@ -354,7 +389,8 @@ class Game:
             elif(self.k==1):
                 if(self.Score[self.actualPlayer]-(self.throw[0]+self.throw[1])<0):
                     self.s=self.s+("\n\nPlayer: Player{}    Your Score got resettet       Score: {}".format((self.actualPlayer+1),self.Score[self.actualPlayer]))
-                    label4.config(text="{}".format(self.s))
+                    self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                    label4.configure(text="{}".format(self.s))
                     self.Score[self.actualPlayer]=self.Score[self.actualPlayer]
                     self.k=0
                     self.throw.clear()
@@ -368,11 +404,12 @@ class Game:
                         self.throw.clear()
                         self.Multiplier.clear()
                         self.finish=True
-                        label4.config(text="Game ended")
+                        label4.configure(text="Game ended")
                         return
                     else:
                         self.s=self.s+("\nPlayer: Player{}  Score: You finished {}st/nd/rd/th\n\n".format((self.actualPlayer+1),self.Playerfinished))
-                        label4.config(text="{}".format(self.s))
+                        self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                        label4.configure(text="{}".format(self.s))
                         self.throw.clear()
                         self.Multiplier.clear()
                         self.k=-1
@@ -380,7 +417,7 @@ class Game:
                             self.throw.clear()
                             self.Multiplier.clear()
                             self.finish=True
-                            label4.config(text="Game ended")
+                            label4.configure(text="Game ended")
                             
                             return
                         else:
@@ -413,12 +450,13 @@ class Game:
             if(self.finish==True):
                 self.throw.clear()
                 self.Multiplier.clear()
-                label4.config(text="Game ended")
+                label4.configure(text="Game ended")
                 return
             elif(self.Score[self.actualPlayer]-(self.throw[0]+self.throw[1]+self.throw[2])<0):
                 self.Score[self.actualPlayer]=self.Score[self.actualPlayer]
                 self.s=self.s+("\n\nPlayer: Player{}    Your Score got resettet       Score: {}".format((self.actualPlayer+1),self.Score[self.actualPlayer]))
-                label4.config(text="{}".format(self.s))
+                self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                label4.configure(text="{}".format(self.s))
                 self.root.after(20,self.NextPlayer)
                 
                 
@@ -430,18 +468,20 @@ class Game:
                     self.throw.clear()
                     self.Multiplier.clear()
                     self.finish=True
-                    label4.config(text="Game ended")
+                    label4.configure(text="Game ended")
                     return
                 else:
                     self.s=self.s+("n\nPlayer: Player{}  Score: You finished {}st/nd/rd/th".format((self.actualPlayer+1),self.Playerfinished))
-                    label4.config(text="{}".format(self.s))
+                    self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                    label4.configure(text="{}".format(self.s))
                     self.throw.clear()
                     self.Multiplier.clear()
                     self.root.after(20,self.NextPlayer)
             else:
                 self.Score[self.actualPlayer]=self.Score[self.actualPlayer]-(self.throw[0]+self.throw[1]+self.throw[2])
-                self.s=self.s+("\nnPlayer: Player{}  Score: {}".format((self.actualPlayer+1),self.Score[self.actualPlayer]))
-                label4.config(text="{}".format(self.s))
+                self.s=self.s+("\n\nPlayer: Player{}  Score: {}".format((self.actualPlayer+1),self.Score[self.actualPlayer]))
+                self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                label4.configure(text="{}".format(self.s))
                 self.throw.clear()
                 self.Multiplier.clear()
                 self.root.after(20,self.NextPlayer)
@@ -457,24 +497,32 @@ class Game:
         if(self.Playerfinished>=self.Spieler):
             self.throw.clear()
             self.Multiplier.clear()
-            self.finish=False
-            label4.config(text="Game ended")
+            self.finish=True
+            label4.configure(text="Game ended")
             return
         elif(self.Score[self.actualPlayer]==0 and self.save1!=1):
             self.root.after(20,self.NextPlayer2)
             self.save1=1
+            
         elif(self.save1!=1):
             self.save1=1
             if((self.k<3)and(self.finish==False)):
-                self.root.after(20,self.GetScore)
-                self.save1=1
+                if(self.end==True):
+                    self.throw.clear()
+                    self.Multiplier.clear()
+                    self.finish=True
+                    label4.configure(text="Game ended")
+                    return
+                else:
+                    self.root.after(20,self.GetScore)
+                    self.save1=1
             
             
             else:
                 if(self.finish==True):
                     self.throw.clear()
                     self.Multiplier.clear()
-                    label4.config(text="Game ended")       
+                    label4.configure(text="Game ended")       
                     
                     return
                 else:
@@ -487,6 +535,7 @@ class Game:
             
 
     def HerunterspielenModeDouble(self):
+        self.p=False
         self.save4=0
         self.save3=0
         self.save1=0
@@ -499,14 +548,14 @@ class Game:
                 if(self.Score[self.actualPlayer]==0):
                     self.root.after(20,self.NextPlayer2)
                 else:
-                    print(9)
+                    
                     self.k=0
                     self.root.after(20,self.ModeDoubleSchleife)
             else:
             
                 self.throw.clear()
                 self.Multiplier.clear()
-                label4.config(text="Game ended")
+                label4.configure(text="Game ended")
                 return
         else:
             pass
@@ -523,20 +572,21 @@ class Game:
                 self.throw.append(0)
                 self.Multiplier.append(1)
                 self.s=self.s+(("\nPlayer: {}  Throw{}: Miss").format((self.actualPlayer+1),(self.k+1)))
-                label4.config(text="{}".format(self.s))
+                label4.configure(text="{}".format(self.s))
             elif(self.finish==True):
                 self.k=2
             else:
                 self.throw.append(Score*Multiplier)
                 self.Multiplier.append(Multiplier)
                 self.s=self.s+(("\nPlayer: {}  Throw{}: {}  Multiplier: {}  Score: {}").format((self.actualPlayer+1),(self.k+1),Score,Multiplier,(Multiplier*Score)))
-                label4.config(text="{}".format(self.s))
+                label4.configure(text="{}".format(self.s))
 
             if(self.k==0):
                 if((self.Score[self.actualPlayer]-(self.throw[0])<0)or((self.Score[self.actualPlayer]-(self.throw[0])<1)and(self.Multiplier[0]!=2))or(((self.Score[self.actualPlayer]-(self.throw[0])<1)and(self.Score[self.actualPlayer]-(self.throw[0])>0))and(self.Multiplier[0]==2))):
                     self.Score[self.actualPlayer]=self.Score[self.actualPlayer]
                     self.s=self.s+("\n\nPlayer: Player{}    Your Score got resettet       Score: {}".format((self.actualPlayer+1),self.Score[self.actualPlayer]))
-                    label4.config(text="{}".format(self.s))        
+                    self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                    label4.configure(text="{}".format(self.s))        
                     
                     self.throw.clear()
                     self.Multiplier.clear()
@@ -550,12 +600,13 @@ class Game:
                         self.throw.clear()
                         self.Multiplier.clear()
                         self.finish=True
-                        label4.config(text="Game ended")
+                        label4.configure(text="Game ended")
                         return
                                 
                     else:
                         self.s=self.s+("\n\nPlayer: Player{}  Score: You finished {}st/nd/rd/th".format((self.actualPlayer+1),self.Playerfinished))
-                        label4.config(text="{}".format(self.s))
+                        self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                        label4.configure(text="{}".format(self.s))
                         self.throw.clear()
                         self.Multiplier.clear()
                         
@@ -563,7 +614,7 @@ class Game:
                             self.throw.clear()
                             self.Multiplier.clear()
                             self.finish=True
-                            label4.config(text="Game ended")
+                            label4.configure(text="Game ended")
                             return
                         else:
                                     
@@ -577,7 +628,8 @@ class Game:
             elif(self.k==1):
                 if((self.Score[self.actualPlayer]-(self.throw[0]+self.throw[1])<0)or((self.Score[self.actualPlayer]-(self.throw[0]+self.throw[1])<1)and(self.Multiplier[1]!=2))or(((self.Score[self.actualPlayer]-(self.throw[0]+self.throw[1])<1)and(self.Score[self.actualPlayer]-(self.throw[0]+self.throw[1])>0))and(self.Multiplier[0]==2))):
                     self.s=self.s+("\n\nPlayer: Player{}    Your Score got resettet       Score: {}".format((self.actualPlayer+1),self.Score[self.actualPlayer]))
-                    label4.config(text="{}".format(self.s))
+                    self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                    label4.configure(text="{}".format(self.s))
                     self.Score[self.actualPlayer]=self.Score[self.actualPlayer]
                     self.root.after(20,self.NextPlayer)
                     self.throw.clear()
@@ -591,18 +643,19 @@ class Game:
                         self.throw.clear()
                         self.Multiplier.clear()
                         self.finish=True
-                        label4.config(text="Game ended")
+                        label4.configure(text="Game ended")
                         return
                                 
                                 
                     else:
                         self.s=self.s+("\n\nPlayer: Player{}  Score: You finished {}st/nd/rd/th".format((self.actualPlayer+1),self.Playerfinished))
+                        self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
                         label4.config(text="{}".format(self.s))
                         if(self.Playerfinished>=(self.Spieler-1)):
                             self.throw.clear()
                             self.Multiplier.clear()
                             self.finish=True
-                            label4.config(text="Game ended")
+                            label4.configure(text="Game ended")
                             return
                         else:
                             self.throw.clear()
@@ -636,16 +689,17 @@ class Game:
                     self.throw.clear()
                     self.Multiplier.clear()
                     self.finish=True
-                    label4.config(text="Game ended")
+                    label4.configure(text="Game ended")
                     return
                 else:
                     self.s=self.s+("\n\nPlayer: Player{}  Score: You finished {}st/nd/rd/th".format((self.actualPlayer+1),self.Playerfinished))
-                    label4.config(text="{}".format(self.s))
+                    self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                    label4.configure(text="{}".format(self.s))
                     if(self.Playerfinished>=(self.Spieler-1)):
                         self.throw.clear()
                         self.Multiplier.clear()
                         self.finish=True
-                        label4.config(text="Game ended")
+                        label4.configure(text="Game ended")
                         return
 
                     else:
@@ -654,13 +708,15 @@ class Game:
             elif((self.Score[self.actualPlayer]-(self.throw[0]+self.throw[1]+self.throw[2]))>=1):
                 self.Score[self.actualPlayer]=self.Score[self.actualPlayer]-(self.throw[0]+self.throw[1]+self.throw[2])
                 self.s=self.s+("\n\nPlayer: Player{}  Score: {}".format((self.actualPlayer+1),self.Score[self.actualPlayer]))
-                label4.config(text="{}".format(self.s))
+                self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                label4.configure(text="{}".format(self.s))
                 self.root.after(20,self.NextPlayer)
 
             else:
                 self.Score[self.actualPlayer]=self.Score[self.actualPlayer]
                 self.s=self.s+("\n\nPlayer: Player{}    Your Score got resettet       Score: {}".format((self.actualPlayer+1),self.Score[self.actualPlayer]))
-                label4.config(text="{}".format(self.s))
+                self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                label4.configure(text="{}".format(self.s))
                 self.root.after(20,self.NextPlayer)
 
         
@@ -671,8 +727,8 @@ class Game:
         if(self.Playerfinished>=self.Spieler):
             self.throw.clear()
             self.Multiplier.clear()
-            self.finish=False
-            label4.config(text="Game ended")
+            self.finish=True
+            label4.configure(text="Game ended")
             return
         if(self.save1!=1):
             self.save1=1
@@ -682,8 +738,14 @@ class Game:
                         self.actualPlayer=self.actualPlayer+1
                     else:
                         self.actualPlayer=0
-                    
-                self.root.after(20,self.GetScore)      
+                if(self.end==True):
+                    self.throw.clear()
+                    self.Multiplier.clear()
+                    self.finish=True
+                    label4.configure(text="Game ended")
+                    return
+                else:
+                    self.root.after(20,self.GetScore)      
             
             else:
                 self.root.after(20,self.HerunterspielenModeDouble)
@@ -699,12 +761,17 @@ class Game:
 
 
     def Start_AroundTheClock(self,Spieleranzahl,simple):
+        self.p=False
+        label4.configure(text="")
+        label3.configure(text="Player 1")
+        self.end=False
         self.s=""
-        label4.config(text="{}".format(self.s))
+        label4.configure(text="{}".format(self.s))
         self.save=0
         self.save1=0
         self.save2=0
         self.save3=0
+        self.k=0
         if(self.save4!=1):
             self.save4=1
             self.Score.clear()
@@ -726,7 +793,7 @@ class Game:
                     self.s1=self.s1+"\nPlayer: {}  You are finished".format((b+1))
                 else:
                     self.s1=self.s1+"\nPlayer: {}  NextGoalScore: {}".format((b+1),self.Score[b])
-            label5.config(text=self.s1)
+            label5.configure(text=self.s1)
             
             if(simple==True):
                 self.Mode=3
@@ -740,10 +807,12 @@ class Game:
             
 
     def AroundTheClockSimple(self):
+        self.p=False
         self.save=0
         self.save4=0
         self.save2=0
         self.save3=0
+        
         if(self.finish==False):
             if(self.save1!=1):
                 self.save1=1
@@ -758,8 +827,8 @@ class Game:
         else:
             self.throw.clear()
             self.Multiplier.clear()
-            self.finish=False
-            label4.config(text="Game ended")
+            self.finish=True
+            label4.configure(text="Game ended")
             return
 
     def SSchleife(self):
@@ -773,12 +842,13 @@ class Game:
                 self.Multiplier.append(0)
                 self.Score[self.actualPlayer]=self.Score[self.actualPlayer]
                 self.s=self.s+(("\nPlayer: {}  Throw{}: Miss").format((self.actualPlayer+1),(self.k+1)))
-                label4.config(text="{}".format(self.s))
+                self.s=self.s+"\nPlayer: {}  NextGoalScore: {}\n".format((self.actualPlayer+1),self.Score[self.actualPlayer])
+                label4.configure(text="{}".format(self.s))
             elif(self.finish==True):
                 self.throw.clear()
                 self.Multiplier.clear()
-                self.finish=False
-                label4.config(text="Game ended")
+                self.finish=True
+                label4.configure(text="Game ended")
                 return
             else:
                 self.throw.append(Score)
@@ -787,8 +857,10 @@ class Game:
             
                 if(self.Score[self.actualPlayer]==26):
                     self.k=-1
+                    self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                    label4.configure(text="{}".format(self.s))
                     self.root.after(20,self.NextPlayer)
-                if(self.throw[self.k]==self.Score[self.actualPlayer]):
+                elif(self.throw[self.k]==self.Score[self.actualPlayer]):
                     if((self.Score[self.actualPlayer])<25):
                         if(self.Score[self.actualPlayer]<=19):
                             self.Score[self.actualPlayer]=self.Score[self.actualPlayer]+1
@@ -796,24 +868,25 @@ class Game:
                         else:
                             self.Score[self.actualPlayer]=25
                         self.s=self.s+(("\nPlayer: {}  Throw{}: {}  Multiplier: {}\nNextGoalSector: {}\n").format((self.actualPlayer+1),(self.k+1),Score,Multiplier,self.Score[self.actualPlayer]))
-                        label4.config(text="{}".format(self.s))
+                        label4.configure(text="{}".format(self.s))
                     else:
                         self.Score[self.actualPlayer]=26
                         self.Playerfinished=self.Playerfinished+1
                         if(self.Playerfinished>=self.Spieler):
                             self.throw.clear()
                             self.Multiplier.clear()
-                            self.finish=False
-                            label4.config(text="Game ended")
+                            self.finish=True
+                            label4.configure(text="Game ended")
                             return
                         else:
                             self.s=self.s+("n\nPlayer: Player{}  Score: You finished {}st/nd/rd/th".format((self.actualPlayer+1),self.Playerfinished))
-                            label4.config(text="{}".format(self.s))
+                            self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                            label4.configure(text="{}".format(self.s))
                             if(self.Playerfinished>=(self.Spieler-1)):
                                 self.throw.clear()
                                 self.Multiplier.clear()
-                                self.finish=False
-                                label4.config(text="Game ended")
+                                self.finish=True
+                                label4.configure(text="Game ended")
                                 return
                             else:
                                 self.k=-1
@@ -826,12 +899,15 @@ class Game:
                 else:
                     self.Score[self.actualPlayer]=self.Score[self.actualPlayer]
                     self.s=self.s+(("\nPlayer: {}  Throw{}: {}  Multiplier: {}\nYou got resettet   NextGoalSector: {}\n").format((self.actualPlayer+1),(self.k+1),Score,Multiplier,self.Score[self.actualPlayer]))
-                    label4.config(text="{}".format(self.s))
+                    label4.configure(text="{}".format(self.s))
             if(self.k==2):
                 self.k=-1
                 self.throw.clear()
                 self.Multiplier.clear()
                 if(self.finish==False):
+                    self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                    
+                    label4.configure(text="{}".format(self.s))
                     self.root.after(20,self.NextPlayer)
             else:
                 self.k=self.k+1
@@ -846,21 +922,31 @@ class Game:
         if(self.save2!=1):
             self.save2=1
             if((self.k<3)and(self.finish==False)):
-                self.root.after(20,self.GetScore)
+                if(self.end==True):
+                    self.throw.clear()
+                    self.Multiplier.clear()
+                    self.finish=True
+                    label4.configure(text="Game ended")
+                    return
+                else:
+                    self.root.after(20,self.GetScore)
             
             else:
                 if(self.finish==False):
-                    self.root.after(20,self.AroundTheClockSimple)
+                    self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                    label4.configure(text="{}".format(self.s))
+                    self.root.after(20,self.NextPlayer)
                 else:
                     self.throw.clear()
                     self.Multiplier.clear()
-                    self.finish=False
-                    label4.config(text="Game ended")
+                    self.finish=True
+                    label4.configure(text="Game ended")
                     return
         else:
             pass
 
     def AroundTheClockAdvanced(self):
+        self.p=False
         self.save=0
         self.save4=0
         self.save2=0
@@ -878,8 +964,8 @@ class Game:
         else:
             self.throw.clear()
             self.Multiplier.clear()
-            self.finish=False
-            label4.config(text="Game ended")
+            self.finish=True
+            label4.configure(text="Game ended")
             return
 
     def ASchleife(self):
@@ -892,12 +978,12 @@ class Game:
                 self.throw.append(0)
                 self.Multiplier.append(0)
                 self.s=self.s+(("\nPlayer: {}  Throw{}: Miss\nNextGoalSector: {}\n").format((self.actualPlayer+1),(self.k+1),self.Score[self.actualPlayer]))
-                label4.config(text="{}".format(self.s))
+                label4.configure(text="{}".format(self.s))
             elif(self.finish==True):
                     self.throw.clear()
                     self.Multiplier.clear()
-                    self.finish=False
-                    label4.config(text="Game ended")
+                    self.finish=True
+                    label4.configure(text="Game ended")
                     return
             else:
                 self.throw.append(Score)
@@ -906,6 +992,8 @@ class Game:
             
                 if(self.Score[self.actualPlayer]==26):
                     self.k=-1
+                    self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                    label4.configure(text="{}".format(self.s))
                     self.root.after(20,self.NextPlayer)
                 elif(self.throw[self.k]==self.Score[self.actualPlayer]):
                     if((self.Score[self.actualPlayer]+self.Multiplier[self.k])<25):
@@ -914,41 +1002,46 @@ class Game:
                         else:
                             self.Score[self.actualPlayer]=25
                         self.s=self.s+(("\nPlayer: {}  Throw{}: {}  Multiplier: {}\nNextGoalSector: {}\n").format((self.actualPlayer+1),(self.k+1),Score,Multiplier,self.Score[self.actualPlayer]))
-                        label4.config(text="{}".format(self.s))
+                        label4.configure(text="{}".format(self.s))
                     else:
                         self.Score[self.actualPlayer]=26
                         self.Playerfinished=self.Playerfinished+1
                         if(self.Playerfinished>=self.Spieler):
                             self.throw.clear()
                             self.Multiplier.clear()
-                            self.finish=False
-                            label4.config(text="Game ended")
+                            self.finish=True
+                            label4.configure(text="Game ended")
                             return
                         else:
                             self.s=self.s+("n\nPlayer: Player{}  Score: You finished {}st/nd/rd/th".format((self.actualPlayer+1),self.Playerfinished))
-                            label4.config(text="{}".format(self.s))
+                            self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                            label4.configure(text="{}".format(self.s))
                             if(self.Playerfinished>=(self.Spieler-1)):
                                 self.throw.clear()
                                 self.Multiplier.clear()
-                                self.finish=False
-                                label4.config(text="Game ended")
+                                self.finish=True
+                                label4.configure(text="Game ended")
                                 return
                             else:
                                 self.k=-1
                                 self.throw.clear()
                                 self.Multiplier.clear()
+                                self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                                label4.configure(text="{}".format(self.s))
                                 self.root.after(20,self.NextPlayer)
 
                             
                 else:
                     self.Score[self.actualPlayer]=self.Score[self.actualPlayer]
                     self.s=self.s+(("\nPlayer: {}  Throw{}: {}  Multiplier: {}\nYou got resettet   NextGoalSector: {}\n").format((self.actualPlayer+1),(self.k+1),Score,Multiplier,self.Score[self.actualPlayer]))
-                    label4.config(text="{}".format(self.s))
+                    label4.configure(text="{}".format(self.s))
             if(self.k==2):
                 self.k=-1
                 self.throw.clear()
                 self.Multiplier.clear()
                 if(self.finish==False):
+                    self.s=self.s+("\nZiehe die Dartpfeile heraus\nKlicke dann auf NextPlayer")
+                    label4.configure(text="{}".format(self.s))
                     self.root.after(20,self.NextPlayer)
             elif(self.Score[self.actualPlayer]!=26):
                 self.root.after(20,self.AdvancedSchleife)
@@ -965,15 +1058,22 @@ class Game:
         if(self.save2!=1):
             self.save2=1
             if((self.k<3)and(self.finish==False)):
-                self.root.after(20,self.GetScore)
+                if(self.end==True):
+                    self.throw.clear()
+                    self.Multiplier.clear()
+                    self.finish=True
+                    label4.configure(text="Game ended")
+                    return
+                else:
+                    self.root.after(20,self.GetScore)
             else:
                 if(self.finish==False):
                     self.root.after(20,self.AroundTheClockAdvanced)
                 else:
                     self.throw.clear()
                     self.Multiplier.clear()
-                    self.finish=False
-                    label4.config(text="Game ended")
+                    self.finish=True
+                    label4.configure(text="Game ended")
                     return
         else:
             pass
@@ -984,7 +1084,7 @@ class Game:
        
 def Herunterspielen1():
     
-        
+    
     
     fenster.deiconify()
     root.withdraw()
@@ -992,7 +1092,7 @@ def Herunterspielen1():
     Spiel.Herunterspielen(int(text1.get("1.0","1.2")),int(text2.get("1.0","1.3")),c1.get())
     
 def ATK():
-        
+     
     
     
     fenster.deiconify()
@@ -1007,44 +1107,46 @@ def destroy():
     fenster.withdraw()
     Spiel.GameEnd
     
-import tkinter as tk
-root=tk.Tk()
-root.geometry("300x300")
+
+root=ctk.CTk()
+root.geometry("500x300")
+root.title("Dartspiel - Setup")
 Spiel=Game()
 
-fenster=tk.Toplevel(root)
-fenster.geometry("600x600")
-button1=tk.Button(fenster, text="EndGame",command=destroy)
-button1.place(x=500,y=500)
-button2=tk.Button(fenster, text="NextPlayer",command=Spiel.NextP)
-button2.place(x=250,y=500)
-button3=tk.Button(fenster, text="Miss",command=Spiel.miss)
-button3.place(x=100,y=500)
-label3=tk.Label(fenster,text="Player 0",justify=tk.LEFT)
+fenster=ctk.CTkToplevel(root)
+fenster.geometry("1000x600")
+fenster.title("Spielstand")
+button1=ctk.CTkButton(fenster, text="EndGame",command=destroy, font=("Arial",36), height=100, width=200)
+button1.place(x=700,y=450)
+button2=ctk.CTkButton(fenster, text="NextPlayer",command=Spiel.NextP, font=("Arial",36), height=100, width=200)
+button2.place(x=400,y=450)
+button3=ctk.CTkButton(fenster, text="Miss",command=Spiel.miss, font=("Arial",36), height=100, width=200)
+button3.place(x=100,y=450)
+label3=ctk.CTkLabel(fenster,text="Player 0", anchor="w", font=("Arial",22))
 label3.place(x=30,y=30)
-label4=tk.Label(fenster,text="",justify=tk.LEFT)
+label4=ctk.CTkLabel(fenster,text="",justify=ctk.LEFT, font=("Arial",22))
 label4.place(x=30,y=60)
-label5=tk.Label(fenster,text="Score:\n\n",justify=tk.LEFT)
-label5.place(x=300,y=30)
+label5=ctk.CTkLabel(fenster,text="Score:\n\n", anchor="w", font=("Arial",22))
+label5.place(x=600,y=30)
 fenster.withdraw()
 
-button4=tk.Button(root, text="Herunterspielen",command=Herunterspielen1,justify=tk.LEFT)
+button4=ctk.CTkButton(root, text="Herunterspielen",command=Herunterspielen1, anchor="w", font=("Arial",24))
 button4.place(x=30,y=150)
-button5=tk.Button(root, text="AroundTheClock",command=ATK,justify=tk.LEFT)
+button5=ctk.CTkButton(root, text="AroundTheClock",command=ATK, anchor="w", font=("Arial",24))
 button5.place(x=30,y=190)
-text1=tk.Text(root,height=2,width=5)
-text1.place(x=100,y=100)
-label1=tk.Label(root,text="Startscore:",justify=tk.LEFT)
-label1.place(x=10,y=50)
-label2=tk.Label(root,text="Spieleranzahl:",justify=tk.LEFT)
-label2.place(x=10,y=100)
-text2=tk.Text(root,height=2,width=5)
-text2.place(x=100,y=50)
-c1=tk.IntVar()
-c2=tk.IntVar()
-cb1=tk.Checkbutton(root,text="DoubleOut", variable=c1, onvalue=True, offvalue=False)
-cb1.place(x=150,y=150)
-cb2=tk.Checkbutton(root,text="Simple", variable=c2, onvalue=True, offvalue=False)
-cb2.place(x=150,y=190)
+text1=ctk.CTkTextbox(root,height=2,width=150, font=("Arial",22))
+text1.place(x=300,y=95)
+label1=ctk.CTkLabel(root,text="Startscore:", anchor="w", font=("Arial",22))
+label1.place(x=30,y=50)
+label2=ctk.CTkLabel(root,text="Spieleranzahl:",anchor="w", font=("Arial",22))
+label2.place(x=30,y=100)
+text2=ctk.CTkTextbox(root,height=2,width=150, font=("Arial",22))
+text2.place(x=300,y=45)
+c1=ctk.IntVar()
+c2=ctk.IntVar()
+cb1=ctk.CTkCheckBox(root,text="DoubleOut", variable=c1, onvalue=True, offvalue=False, font=("Arial",24))
+cb1.place(x=300,y=150)
+cb2=ctk.CTkCheckBox(root,text="Simple", variable=c2, onvalue=True, offvalue=False, font=("Arial",24))
+cb2.place(x=300,y=190)
 root.mainloop()
 
